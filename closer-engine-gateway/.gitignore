@@ -1,0 +1,100 @@
+# -------------------------------
+# Python bytecode / cache / builds
+# -------------------------------
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+*.dylib
+*.dll
+*.egg
+*.egg-info/
+dist/
+build/
+wheels/
+.eggs/
+
+# -------------------------------
+# Virtual environments
+# -------------------------------
+.venv/
+venv/
+env/
+ENV/
+
+# -------------------------------
+# Distribution / packaging
+# -------------------------------
+*.egg-info/
+pip-wheel-metadata/
+*.manifest
+*.spec
+
+# -------------------------------
+# Logs / temp
+# -------------------------------
+*.log
+*.tmp
+*.bak
+*.swp
+*.swo
+*.sqlite3
+*.db
+
+# -------------------------------
+# Environment variables / secrets
+# -------------------------------
+.env
+.env.*   # si tu as .env.local, .env.test, etc.
+secrets.json
+
+# -------------------------------
+# IDE / editors
+# -------------------------------
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+*.iml
+
+# -------------------------------
+# OS files
+# -------------------------------
+.DS_Store
+Thumbs.db
+
+# -------------------------------
+# FastAPI / Uvicorn / async tools
+# -------------------------------
+# Uvicorn reload cache
+__pycache__/uvicorn/
+*.pid
+*.sock
+*.log
+
+# HTTPX / async client caches (optionnel)
+httpx_cache/
+*.cache
+
+# -------------------------------
+# Testing
+# -------------------------------
+.pytest_cache/
+.coverage
+htmlcov/
+.tox/
+nosetests.xml
+coverage.xml
+*.cover
+*.py,cover
+
+# -------------------------------
+# Misc
+# -------------------------------
+*.pot
+*.mo
+*.mo~
+*.pot~
+*.bak
+*.orig
+*.rej
