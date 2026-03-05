@@ -1,9 +1,18 @@
 """Point d'entrée principal de l'application Closer Engine."""
 
+import logging
+
 from fastapi import FastAPI
 from fastapi.responses import JSONResponse
 
+from app.api.webhooks.meta import router as meta_webhook_router
 from app.core.config import settings
+
+# Configuration du logging applicatif
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(asctime)s — %(name)s — %(levelname)s — %(message)s",
+)
 
 app: FastAPI = FastAPI(
     title=settings.APP_NAME,
@@ -12,6 +21,9 @@ app: FastAPI = FastAPI(
     docs_url="/docs",
     redoc_url="/redoc",
 )
+
+# Enregistrement des routeurs
+app.include_router(meta_webhook_router)
 
 
 @app.get(
