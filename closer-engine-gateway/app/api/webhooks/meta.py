@@ -8,10 +8,11 @@ Ce module expose deux routes sur l'endpoint /webhook :
 import logging
 from typing import Any
 
-from fastapi import APIRouter, HTTPException, Query
+from fastapi import APIRouter, HTTPException, Query, BackgroundTasks
 from fastapi.responses import PlainTextResponse
 
 from app.core.config import settings
+from app.services.whatsapp_worker import process_whatsapp_message
 
 logger: logging.Logger = logging.getLogger(__name__)
 
@@ -70,18 +71,26 @@ async def verify_webhook(
     summary="Réception des messages WhatsApp",
     status_code=200,
 )
-async def receive_message(payload: dict[str, Any]) -> dict[str, str]:
+async def receive_message(
+    payload: dict[str, Any],
+    background_tasks: BackgroundTasks,
+) -> dict[str, str]:
     """Reçoit et accuse réception des événements WhatsApp envoyés par Meta.
 
     Meta exige une réponse HTTP 200 immédiate (sous 20 secondes) pour éviter
-    les retransmissions. Le traitement asynchrone du message sera délégué
-    à un worker/queue dans les étapes ultérieures du projet.
+    les retransmissions. Le traitement asynchrone du message est délégué
+    à un worker en arrière-plan (BackgroundTasks).
 
     Args:
         payload: Corps JSON brut de la notification Meta (messages, statuts, etc.).
+        background_tasks: Injecteur FastAPI pour l'exécution asynchrone hors requête.
 
     Returns:
         dict[str, str]: Accusé de réception immédiat {"status": "ok"}.
     """
-    logger.info("Payload WhatsApp reçu : %s", payload)
+    logger.info("Payload WhatsApp reçu, délégation en arrière-plan...")
+    
+    # Délégation du vrai traitement pour répondre en < 200ms
+    background_tasks.add_task(process_whatsapp_message, payload)
+    
     return {"status": "ok"}
